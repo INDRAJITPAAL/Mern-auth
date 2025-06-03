@@ -7,7 +7,6 @@ import ExpressError from '../utils/AppError.utils';
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies?.jwt;
-
     if (!token) {
         return next(new ExpressError('You must be logged in to access this resource.', 401));
     }

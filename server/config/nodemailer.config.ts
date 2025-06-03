@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function sendMail({ email, subject, text }: { email: string; subject: string; text: string;}) {
+async function sendMail({ email, subject, text }: { email: string; subject: string; text: string; }) {
   if (!email || !subject || !text) {
     throw new Error("Email, subject, and text are required parameters.");
   }

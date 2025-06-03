@@ -10,12 +10,15 @@ import dataRoutes from "./routes/UserData.routes";
 
 //db connection
 import connectDB from "./config/mongoDB.config";
-connectDB();
 
 
 
 
-app.use(cors({ credentials: true }));
+
+app.use(cors({
+  origin: 'http://localhost:5173', // your frontend origin
+  credentials: true,               // ✅ allow cookies
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -44,9 +47,19 @@ app.use((err, req, res, next) => {
   })
 });
 
+const main = () => {
+  const PORT = process.env.PORT || 3000;
+  connectDB()
+    .then(() => {
+      console.log("MongoDB connected successfully");
+      app.listen(PORT, () => {
+        console.log(`http://localhost:${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.error("MongoDB connection error:", err);
+    });
+}
+main();
 
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`);
-});

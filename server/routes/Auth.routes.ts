@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { login, register, logout, sendOTP, verifyOTP, sendResetOtp, resetPassword } from '../controllers/Auth.controller.ts';
+import { login, register, logout, sendOTP, verifyOTP, sendResetOtp, resetPassword, profile } from '../controllers/Auth.controller.ts';
 import asignIdInLocals from '../middlewares/AssignIdOnLocals.middleware.ts';
 import isAuthenticated from '../middlewares/isAuthenticated.middleware.ts';
 
@@ -8,6 +8,7 @@ import isAuthenticated from '../middlewares/isAuthenticated.middleware.ts';
 router.post('/register', register);
 //@ts-ignore
 router.post('/login', login);
+
 //@ts-ignore
 router.post('/logout', logout);
 //@ts-ignore

@@ -103,8 +103,7 @@ export const login = async (
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: false, // Set to true in production
-      //@ts-ignore
+      secure: true, // Set to true in production
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -136,15 +135,18 @@ export const logout = async (
   try {
     res.clearCookie("jwt", {
       httpOnly: true,
-      secure: false, // Set to true in production
-      //@ts-ignore
-      sameSite: false, // Use "None" in production if using HTTPS
+      secure: true, // Set to true in production
+      sameSite: "strict",
     });
+
+
 
     return res.status(200).json({
       status: "success",
-      message: "User logged out",
+      message: "User logged out successfully",
     });
+
+
   } catch (err) {
     return next(
       new ExpressError(
@@ -348,3 +350,41 @@ export const resetPassword = async (
     );
   }
 };
+
+
+
+
+
+
+export const profile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.cookies || req.cookies.jwt === undefined) {
+      return next(new ExpressError("Unauthorized", 401));
+    } else {
+
+      const { UserID } = res.locals;
+      if (!UserID) {
+        return next(new ExpressError("UserId is required", 400));
+      }
+
+      const user = await User.findOne({ _id: UserID }).exec();
+      if (!user) {
+        return next(new ExpressError("User not found", 404));
+      }
+
+      return res.status(200).json({
+        status: "success",
+        message: "User profile fetched successfully",
+        data: cleanUser(user),
+      });
+    }
+
+  } catch (err) {
+    return next(
+      new ExpressError(
+        (err instanceof Error ? err.message : "Unknown error") + " during fetching user profile",
+        500
+      )
+    );
+  }
+}
