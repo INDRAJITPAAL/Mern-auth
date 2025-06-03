@@ -1,5 +1,10 @@
 import React, { useRef } from 'react';
 import { ExportAssets } from '../assets/ExportAssets';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 function EmailVerify() {
   const [otp, setOtp] = React.useState(Array(6).fill(''));
@@ -45,9 +50,45 @@ function EmailVerify() {
     }
   };
 
+
+  const { BACKEND_URL, getUser } = useContext(AppContext) || {};
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Entered OTP: ${otp.join('')}`);
+    try {
+      const otpString = otp.join('');
+      if (otpString.length < 6) {
+        toast.error("Please enter a complete OTP.");
+        return;
+      }
+
+      axios.post(`${BACKEND_URL}/api/v1/auth/verifyotp`, { otp: otpString }, {
+        withCredentials: true,
+      })
+        .then(response => {
+          if (response.data.status === "success") {
+            toast.success("OTP verified successfully!");
+            navigate("/"); // Redirect to dashboard or desired page
+            // Redirect or perform further actions
+
+
+          }
+        })
+        .catch(error => {
+          console.error("Error verifying OTP:", error);
+          toast.error("Failed to verify OTP. Please try again.");
+        }).finally(async () => {
+          if (getUser) {
+            await getUser(); // Refresh user data
+          }
+        });
+
+
+    } catch (error) {
+      console.error("Error during OTP verification:", error);
+      toast.error("Failed to verify OTP. Please try again.");
+    }
   };
 
   return (

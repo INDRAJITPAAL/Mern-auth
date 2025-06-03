@@ -1,7 +1,7 @@
 import { ExportAssets } from '../assets/ExportAssets';
 import { useNavigate, Link } from 'react-router-dom';
 import { useRerenderStore } from '../stores/rerenderStore';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 
@@ -38,7 +38,32 @@ function Login() {
         const data = await login({ email, password });
         if (data.status === "success") {
           await getUser();
-          toast.success("Login successful!");
+          toast.success("Login successful!", {
+            duration: 4000,
+            position: 'top-center',
+
+            // Styling
+            style: {},
+            className: 'bg-red-500 text-white font-semibold',
+
+            // Custom Icon
+            icon: '👏',
+
+            // Change colors of success/error/loading icon
+            iconTheme: {
+              primary: '#000',
+              secondary: '#fff',
+            },
+
+            // Aria
+            ariaProps: {
+              role: 'status',
+              'aria-live': 'polite',
+            },
+
+            // Additional Configuration
+            removeDelay: 1000,
+          });
           setEmail("");
           setPassword("");
           navigate("/");

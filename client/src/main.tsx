@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router'
 import AppContextProvider from './context/AppContext.tsx'
-import { ToastContainer } from "react-toastify";
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AppContextProvider>
         <App />
-        <ToastContainer />
+        <Toaster />
       </AppContextProvider>
     </BrowserRouter>
   </StrictMode>

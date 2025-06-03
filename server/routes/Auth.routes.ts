@@ -16,7 +16,7 @@ router.post('/resetotp', sendResetOtp);
 //@ts-ignore
 router.post('/resetpassword', resetPassword);
 //@ts-ignore
-router.post('/sendotp', isAuthenticated, asignIdInLocals, sendOTP);
+router.post('/verify-email', isAuthenticated, asignIdInLocals, sendOTP);
 //@ts-ignore
 router.post('/verifyotp', isAuthenticated, asignIdInLocals, verifyOTP);
 

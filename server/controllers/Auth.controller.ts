@@ -221,6 +221,7 @@ export const verifyOTP = async (
   try {
     const { UserID } = res.locals;
     const { otp } = req.body;
+    console.log(otp)
     if (!UserID || !otp) {
       return next(new ExpressError("UserId and OTP are required", 400));
     }

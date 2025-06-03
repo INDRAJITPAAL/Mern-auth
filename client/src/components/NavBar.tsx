@@ -2,12 +2,12 @@ import { ExportAssets } from "../assets/ExportAssets";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState, useRef, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import axios from "axios";
 
 function NavBar() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(AppContext) || {};
+  const { user, setUser, BACKEND_URL } = useContext(AppContext) || {};
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -88,11 +88,25 @@ function NavBar() {
               {!isVerified && (
                 <button
                   className="w-full text-left px-4 py-2 text-blue-600 hover:bg-blue-50 transition"
-                  onClick={() => navigate("/verify-email")}
+                  onClick={async () => {
+                    try {
+                      await axios.post(`${BACKEND_URL}/api/v1/auth/verify-email`, {}, { withCredentials: true });
+                      toast.success("Verification OTP sent to your Mail !.",{
+                        icon: <img src={ExportAssets.mail_icon} alt="mail icon" className="w-5 h-5" />
+                      });
+                      navigate("/verify-email");
+                    } catch (error) {
+                      console.error("Email verification error:", error);
+                    }
+                  }}
                 >
+
                   Verify Email
                 </button>
               )}
+
+
+
               <button
                 className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition"
                 onClick={handleLogout}
@@ -109,8 +123,9 @@ function NavBar() {
         >
           Log In <img src={ExportAssets.arrow_icon} alt="" />
         </button>
-      )}
-    </nav>
+      )
+      }
+    </nav >
   );
 }
 

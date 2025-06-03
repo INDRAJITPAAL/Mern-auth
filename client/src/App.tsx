@@ -10,8 +10,8 @@ function App() {
     <>
       <Routes>
         <Route index element={<Home />} />
-        <Route path="/emailVerify" element={<EmailVerify />} />
-        <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/verify-email" element={<EmailVerify />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>
